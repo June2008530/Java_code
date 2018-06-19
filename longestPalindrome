@@ -1,0 +1,29 @@
+class Solution {
+    public String longestPalindrome(String s) {
+        String ans = "";
+        for(int i = 0; i < s.length(); i++){
+            String s1 = expandPalindrome(s, i, i); //palindrome has one center, 'aba'
+            String s2 = expandPalindrome(s, i, i+1); //palindrome has two centers, even length 'abba'
+            if(s1.length() > ans.length()){
+                ans = s1;
+            }
+            if(s2.length() > ans.length()){
+                ans = s2;
+            }
+        }
+        
+        return ans;
+    }
+    
+    //expand palindrome around center
+    String expandPalindrome(String s, int left, int right){
+        int L = left;
+        int R = right;
+        while(L >= 0 && R < s.length() && s.charAt(L) == s.charAt(R)){
+            L--;
+            R++;
+        }
+        
+        return s.substring(L+1,R);
+    }
+}
