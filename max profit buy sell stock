@@ -1,0 +1,18 @@
+class Solution {
+    public int maxProfit(int[] prices) {
+        int maxp = 0;
+        if(prices == null || prices.length == 0){
+            return maxp;
+        }
+        
+        int curmin = prices[0];
+
+        for(int i = 1; i < prices.length; i++){
+            curmin = Math.min(curmin, prices[i]);
+            maxp = Math.max(prices[i] - curmin, maxp);
+            maxp = Math.max(maxp, 0);
+        }
+        
+        return maxp;
+    }
+}
