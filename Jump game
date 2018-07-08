@@ -1,0 +1,19 @@
+class Solution {
+    public boolean canJump(int[] nums) {
+        if(nums == null || nums.length == 0){
+            return false;
+        }
+        
+        //greedy
+        int maxstep = 0;
+        for(int i = 0; i < nums.length; i++){
+            if(i > maxstep){
+                return false;
+            }
+            
+            maxstep = Math.max(nums[i] + i, maxstep);
+        }
+        
+        return true;
+    }
+}
