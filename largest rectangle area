@@ -1,0 +1,44 @@
+class Solution {
+    public int largestRectangleArea(int[] heights) {
+        if(heights == null || heights.length == 0){
+            return 0;
+        }
+
+        //method 1 - O(n^2)
+        /*
+        int maxarea = heights[0];
+        for(int i = 0; i < heights.length; i++){
+            int curmin = heights[i];
+            for(int j = i; j < heights.length; j++){
+                curmin = Math.min(curmin, heights[j]);
+                maxarea = Math.max(maxarea, curmin * (j-i+1));
+            }
+            
+        }
+        
+        return maxarea;
+        */
+        //method 2 - O(n)
+        int maxarea = heights[0];
+        Stack<Integer> stack = new Stack();
+        int i = 0;
+        while(i < heights.length){
+            int cur = heights[i];
+            if(stack.isEmpty() || cur >= heights[stack.peek()]){
+                stack.push(i);
+                i++;
+            }
+            else{
+                int pop = stack.pop();
+                maxarea = Math.max(maxarea, heights[pop] * (stack.isEmpty() ? i: (i - 1 - stack.peek())));
+            }
+        }
+        
+        while(!stack.isEmpty()){
+            int pop = stack.pop();
+            maxarea = Math.max(maxarea, heights[pop] * (stack.isEmpty() ? i : (i - 1 - stack.peek())));
+        }
+        
+        return maxarea;
+    }
+}
