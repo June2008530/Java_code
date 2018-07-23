@@ -1,0 +1,76 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public List<Integer> inorderTraversal(TreeNode root) {
+        List<Integer> ans = new ArrayList<Integer>();
+        
+        if(root == null){
+            return ans;
+        }
+        
+        Stack<Element> stack = new Stack<>();
+        //method3
+        stack.push(new Element(0, root));
+        
+        while(!stack.isEmpty()){
+            Element curr = stack.pop();
+            if(curr.node == null){
+                continue;
+            }
+            
+            if(curr.type == 1){
+                ans.add(curr.node.val);
+            }
+            else{
+                stack.push(new Element(0, curr.node.right));
+                stack.push(new Element(1, curr.node));
+                stack.push(new Element(0, curr.node.left));
+            }
+        }
+        
+        //method2
+        /*
+        TreeNode cur = root;
+    
+        while(cur != null || !stack.isEmpty()){
+            while(cur != null){
+                stack.push(cur);
+                cur = cur.left;
+            }
+            
+            cur = stack.pop();
+            ans.add(cur.val);
+            cur = cur.right;
+        }
+        */
+        return ans;
+    }
+    
+    //method3
+    private class Element{
+        int type; // 0 - visit, 1 - print
+        TreeNode node;
+        Element(int type, TreeNode node){
+            this.type = type;
+            this.node = node;
+        }
+    }
+    
+    //method 1 recursive
+    private void helper(TreeNode root, List<Integer> ans){
+        if(root == null){
+            return;
+        }
+        
+        helper(root.left, ans);
+        ans.add(root.val);
+        helper(root.right, ans);
+    }
+}
