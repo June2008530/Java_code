@@ -1,0 +1,68 @@
+/**
+ * Definition for undirected graph.
+ * class UndirectedGraphNode {
+ *     int label;
+ *     List<UndirectedGraphNode> neighbors;
+ *     UndirectedGraphNode(int x) { label = x; neighbors = new ArrayList<UndirectedGraphNode>(); }
+ * };
+ */
+public class Solution {
+    //old and copy new node
+    HashMap<UndirectedGraphNode, UndirectedGraphNode> hm = new HashMap<>();
+    
+    public UndirectedGraphNode cloneGraph(UndirectedGraphNode node) {
+        if(node == null) return node;
+        
+        //bfs
+        HashMap<UndirectedGraphNode, UndirectedGraphNode> hashmap = new HashMap<>();
+        Queue<UndirectedGraphNode> queue = new LinkedList<>();
+        queue.offer(node);
+        
+        //copy node
+        while(!queue.isEmpty()){
+            UndirectedGraphNode cur = queue.poll();
+            if(!hashmap.containsKey(cur)){
+                UndirectedGraphNode copy = new UndirectedGraphNode(cur.label);
+                hashmap.put(cur, copy);
+                for(UndirectedGraphNode neighbor : cur.neighbors){
+                    if(!queue.contains(neighbor)){
+                        queue.offer(neighbor);
+                    }
+                }
+            }
+        }
+        
+        //copy neighbor
+        for(UndirectedGraphNode ugn : hashmap.keySet()){
+            UndirectedGraphNode copy = hashmap.get(ugn);
+            for(UndirectedGraphNode neighbor : ugn.neighbors){
+                //need get copyneighbor
+                UndirectedGraphNode copyneighbor = hashmap.get(neighbor);
+                copy.neighbors.add(copyneighbor);
+            }
+        }
+        
+        return hashmap.get(node);
+        
+        //dfs
+        //return helper(node);
+    }
+    
+    //dfs
+    UndirectedGraphNode helper(UndirectedGraphNode node){
+        if(node == null) return null;
+        if(hm.containsKey(node)){
+            return hm.get(node);
+        }
+        
+        UndirectedGraphNode copy = new UndirectedGraphNode(node.label);
+        hm.put(node, copy);
+            
+        for(UndirectedGraphNode cur : node.neighbors){
+            UndirectedGraphNode clone = helper(cur);
+            copy.neighbors.add(clone);
+        }
+        
+        return copy;
+    }
+}
