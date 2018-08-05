@@ -1,0 +1,94 @@
+class LRUCache {
+    //data structure, hashmap + double linked list
+    private class Node{
+        int key;
+        int value;
+        Node prev;
+        Node next;
+        public Node(int key, int value){
+            this.key = key;
+            this.value = value;
+        }
+    }
+    
+    private int capacity;
+    private HashMap<Integer, Node> hashmap;
+    private Node head;
+    private Node tail;
+    
+    public LRUCache(int capacity) {
+        this.capacity = capacity;
+        hashmap = new HashMap<>();
+        head = null;
+        tail = null;
+    }
+    
+    public void removeNode(Node node){
+        if(node.prev != null){
+            node.prev.next = node.next;
+        }
+        else{
+            head = node.next;
+        }
+        
+        if(node.next != null){
+            node.next.prev = node.prev;
+        }
+        else{
+            tail = node.prev;
+        }
+    }
+    
+    public void addAtHead(Node node){
+        node.next = head;
+        node.prev = null;
+        if(head != null){
+            head.prev = node;
+        }
+        head = node;
+        if(tail == null){
+            tail = head;
+        }
+    }
+    
+    public int get(int key) {
+        Node node = hashmap.get(key);
+        if(node != null){
+            removeNode(node);
+            addAtHead(node);
+            return node.value;
+        }
+        else{
+            return -1;
+        }
+    }
+    
+    public void put(int key, int value) {
+        Node node = hashmap.get(key);
+        //key already exist, just update the key value and move to the head
+        if(node != null){
+            node.value = value;
+            removeNode(node);
+            addAtHead(node);
+        }
+        else{
+            Node newnode = new Node(key, value);
+            if(hashmap.size() >= capacity){
+                hashmap.remove(tail.key);
+                removeNode(tail);
+                addAtHead(newnode);
+            }
+            else{
+                addAtHead(newnode);
+            }
+            hashmap.put(key, newnode);
+        }
+    }
+}
+
+/**
+ * Your LRUCache object will be instantiated and called as such:
+ * LRUCache obj = new LRUCache(capacity);
+ * int param_1 = obj.get(key);
+ * obj.put(key,value);
+ */
