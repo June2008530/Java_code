@@ -1,0 +1,50 @@
+/**
+ * Definition for a point.
+ * class Point {
+ *     int x;
+ *     int y;
+ *     Point() { x = 0; y = 0; }
+ *     Point(int a, int b) { x = a; y = b; }
+ * }
+ */
+class Solution {
+    public int maxPoints(Point[] points) {
+        int ans = 0;
+        for(int i = 0; i < points.length; i++){
+            HashMap<String, Integer> hashmap = new HashMap<>();
+            int samePoint = 1;
+            int maxPoint = 0;
+            for(int j = i+1; j < points.length; j++){
+                if(points[i].x == points[j].x && points[i].y == points[j].y){
+                    samePoint++;
+                }
+                else{
+                    String hashstr = getSlope(points[i], points[j]);
+                    hashmap.put(hashstr, hashmap.getOrDefault(hashstr, 0) + 1);
+                    maxPoint = Math.max(maxPoint, hashmap.get(hashstr));
+                }
+            }
+            
+            ans = Math.max(ans, maxPoint + samePoint);
+        }
+        
+        return ans;
+    }
+    
+    private int gcd(int a, int b){
+        return b == 0 ? a : gcd(b, a % b);
+    }
+    
+    private String getSlope(Point a, Point b){
+        int dx = a.x - b.x;
+        int dy = a.y - b.y;
+        if(dx == 0){
+            return 0 + "/" + a.x;
+        }
+        if(dy == 0){
+            return a.y + "/" + 0;
+        }
+        
+        return (dy/gcd(dx, dy)) + "/" + (dx/gcd(dx, dy));
+    }
+}
