@@ -1,0 +1,43 @@
+class Solution {
+ /**
+     * Example: 19 is a happy number
+     1^2 + 9^2 = 82
+     8^2 + 2^2 = 68
+     6^2 + 8^2 = 100
+     1^2 + 0^2 + 0^2 = 1
+     time : 不知道
+     space : O(n)
+     
+     * @param n
+     * @return
+     */
+    public boolean isHappy(int n) {
+        int sum = 0;
+        HashSet<Integer> hs = new HashSet<>();
+        
+        while (sum != 1){
+            sum = 0;
+
+            while(n > 0){
+                int a = n % 10;
+                n = n/10;
+                sum += a * a;
+            }
+            
+            if(sum == 1){
+                return true;
+            }
+            else{
+                if(hs.contains(sum)){
+                    return false;
+                }
+                else{
+                    hs.add(sum);
+                    n = sum;
+                }
+            }
+        }
+        
+        return false;
+    }
+}
