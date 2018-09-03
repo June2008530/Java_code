@@ -1,0 +1,37 @@
+class Solution {
+//topological sort
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
+        //calculate indegree for each edge
+        int[] indegree = new int[numCourses];
+        for(int[] pre : prerequisites){
+            indegree[pre[0]]++;
+        }
+        
+        Queue<Integer> queue = new LinkedList<>();
+        //put zero indegree courses into queue
+        for(int i = 0; i < indegree.length; i++){
+            if(indegree[i] == 0){
+                queue.offer(i);
+            }
+        }
+        
+        int res = numCourses;
+        
+        while(!queue.isEmpty()){
+            //zero indegree course can be finished
+            int temp = queue.poll();
+            res--;
+            //loop through each pair
+            for(int[] pre : prerequisites){
+                if(pre[1] == temp){
+                    indegree[pre[0]]--;
+                    if(indegree[pre[0]] == 0){
+                        queue.offer(pre[0]);
+                    }
+                }
+            }
+        }
+        
+        return res == 0;
+    }
+}
