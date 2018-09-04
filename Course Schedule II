@@ -1,0 +1,44 @@
+class Solution {
+    public int[] findOrder(int numCourses, int[][] prerequisites) {
+        int[] ans = new int[numCourses];
+        if(prerequisites == null || prerequisites.length == 0){
+            for(int i = 0; i < numCourses; i++){
+                ans[i] = i;
+            }
+            
+            return ans;
+        }
+        
+        //compute indegree
+        int[] indegree = new int[numCourses];
+        for(int[] pre : prerequisites){
+            indegree[pre[0]]++;
+        }
+        
+        //put zero indegree node in queue
+        Queue<Integer> queue = new LinkedList<>();
+        for(int i = 0; i < indegree.length; i++){
+            if(indegree[i] == 0){
+                queue.offer(i);
+            }
+        }
+        
+        //loop over each pair
+        int j = 0;
+        while(!queue.isEmpty()){
+            int temp = queue.poll();
+            ans[j] = temp;
+            j++;
+            for(int[] pair : prerequisites){
+                if(pair[1] == temp){
+                    indegree[pair[0]]--;
+                    if(indegree[pair[0]] == 0){
+                        queue.offer(pair[0]);
+                    }
+                }
+            }
+        }
+        
+        return (j == numCourses) ? ans : new int[0];
+    }
+}
