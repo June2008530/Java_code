@@ -1,0 +1,32 @@
+class Solution {
+    /*
+    leetcode 213
+    */
+    public int rob(int[] nums) {
+        if(nums == null || nums.length == 0){
+            return 0;
+        }
+        if(nums.length == 1){
+            return nums[0];
+        }
+        if(nums.length == 2){
+            return Math.max(nums[0], nums[1]);
+        }
+        
+        int len = nums.length;
+        return Math.max(robHelper(nums,0,len-1), robHelper(nums, 1, len));
+    }
+    
+    private int robHelper(int[] nums, int start, int end){
+        int pre0 = nums[start];
+        int pre1 = Math.max(nums[start], nums[start+1]);
+     
+        for(int i = start+2; i < end; i++){
+            int temp = Math.max(pre1, pre0 + nums[i]);
+            pre0 = pre1;
+            pre1 = temp;
+        }
+        
+        return Math.max(pre0, pre1);
+    }
+}
