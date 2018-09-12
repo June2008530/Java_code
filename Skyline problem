@@ -1,0 +1,65 @@
+class Solution {
+    class BuildingPoint implements Comparable<BuildingPoint>{
+        int x;
+        boolean isStart;
+        int height;
+        
+        @Override
+        public int compareTo(BuildingPoint o){
+            if(this.x != o.x){
+                return this.x - o.x;
+            }
+            else{
+                return (this.isStart? -this.height : this.height) - (o.isStart ? -o.height : o.height);
+            }
+        }
+    }
+    
+    public List<int[]> getSkyline(int[][] buildings) {
+        BuildingPoint[] buildingpoints = new BuildingPoint[buildings.length * 2];
+        int index = 0;
+        for(int[] item : buildings){
+            buildingpoints[index] = new BuildingPoint();
+            buildingpoints[index].x = item[0];
+            buildingpoints[index].isStart = true;
+            buildingpoints[index].height = item[2];
+            
+            buildingpoints[index+1] = new BuildingPoint();
+            buildingpoints[index+1].x = item[1];
+            buildingpoints[index+1].isStart = false;
+            buildingpoints[index+1].height = item[2];
+        
+            index += 2;
+        }
+        
+        Arrays.sort(buildingpoints);
+        
+        TreeMap<Integer, Integer> map = new TreeMap<>(); //key:height, value:count of height
+        map.put(0,1);
+        int preHeight = 0;
+        List<int[]> ans = new ArrayList<>();
+        
+        for(BuildingPoint bp : buildingpoints){
+            if(bp.isStart){ //add to map
+                map.put(bp.height, map.getOrDefault(bp.height, 0) + 1);
+            }
+            else{//remove from map
+                int count = map.get(bp.height);
+                if(count == 1){
+                    map.remove(bp.height);
+                }
+                else{
+                    map.put(bp.height, count - 1);
+                }
+            }
+            
+            int curHeight = map.lastKey();
+            if(curHeight != preHeight){
+                ans.add(new int[]{bp.x, curHeight});
+                preHeight = curHeight;
+            }
+        }
+        
+        return ans;
+    }
+}
