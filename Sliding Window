@@ -1,0 +1,44 @@
+class Solution {
+    public int[] maxSlidingWindow(int[] nums, int k) {
+        if(nums == null || nums.length == 0){
+            return new int[]{};
+        }
+        
+        //method 2: Deque, time: O(n), space: O(n)
+    
+        int[] res = new int[nums.length - k + 1];
+        /*
+        Deque<Integer> deque = new LinkedList<>();
+        for(int i = 0; i < nums.length; i++){
+            while(!deque.isEmpty() && deque.peekLast() < nums[i]){
+                deque.removeLast();
+            }
+            deque.addLast(nums[i]);
+            
+            if(i-k+1 >= 0){
+                res[i-k+1] = deque.peekFirst();//First is always largest
+                if(nums[i-k+1] == deque.peekFirst()){
+                    deque.removeFirst();//remove only if largest equals the first in the window
+                }
+            }
+        }
+        return res;
+        */
+        
+        //method 1 - PriorityQueue, time: O(nlogn), space: O(n)
+        PriorityQueue<Integer> pq = new PriorityQueue<>(k, Collections.reverseOrder());
+        
+        for(int i = 0; i < nums.length; i++){
+            pq.add(nums[i]);
+            
+            if(i-k+1 >= 0){
+                res[i-k+1] = pq.peek();
+                pq.remove(nums[i-k+1]);
+            }
+            
+        }
+        
+        return res;
+        
+    }
+}
