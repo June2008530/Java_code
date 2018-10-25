@@ -1,0 +1,51 @@
+#Analysis of Twitter Data Using R, Word Cloud
+api_key <- "..."
+api_secret <- "..."
+api_token <- "..."
+api_token_secret <- "..."
+setup_twitter_oauth(api_key,api_secret,api_token,api_token_secret)
+
+library(wordcloud)
+library(SnowballC)
+library(tm)
+
+#Extract tweets from Twitter.
+user_tw <- searchTwitter("realdonaltrump", n=1000, lang="en")
+
+#Identiy & create text files to turn into a cloud.
+user_text <- sapply(user_tw, function(x) x$getText())
+
+#Create a corpus from the collection of text files
+user_text_corpus <- Corpus(VectorSource(user_text))
+
+#Data Cleaning on the text files
+#Remove punctuation
+user_text_corpus <- tm_map(user_text_corpus, removePunctuation)
+#Transform text to lower case.
+user_text_corpus <- tm_map(user_text_corpus, content_transformer(tolower))
+#To remove stopwords.
+user_text_corpus <- tm_map(user_text_corpus, function(x)removeWords(x,stopwords()))
+#Remove your own stop word
+user_text_corpus <- tm_map(user_text_corpus, removeWords, c("elonmusk","elon","musk","twitter","feed","meme","memes","pewdiepie","\*d","review"))
+#Remove URL’s from text
+removeURL <- function(x) gsub("http[[:alnum:]]*", "", x)
+user_text_corpus <- tm_map(user_text_corpus, content_transformer(removeURL))
+
+#Build a term-document matrix
+#Document matrix is a table containing the frequency of the words. 
+#Column names are words and row names are documents.
+user_2 <- TermDocumentMatrix(user_text_corpus)
+user_2 <- as.matrix(user_2)
+user_2 <- sort(rowSums(user_2),decreasing=TRUE)
+
+#Converting words to dataframe
+user_2 <- data.frame(word = names(user_2),freq=user_2)
+head(user_2, 10)
+
+#Plot word frequencies
+#barplot(user_2[1:10,]$freq, las = 2, names.arg = user_2[1:10,]$word,
+#        col ="blue", main ="Most frequent words", ylab = "Word frequencies")
+
+#Generate the Word cloud
+set.seed(1234)
+wordcloud(user_text_corpus,min.freq=1,max.words=80,scale=c(2.2,1), colors=brewer.pal(8, "Dark2"),random.color=T, random.order=F)
