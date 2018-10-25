@@ -1,4 +1,10 @@
 #Analysis of Twitter Data Using R, Word Cloud
+
+library(twitteR)
+library(ROAuth)
+library(plyr)
+library(stringr)
+
 api_key <- "..."
 api_secret <- "..."
 api_token <- "..."
