@@ -1,4 +1,5 @@
 class RandomizedSet {
+    //leetcode 380
     //key: val insert, value: arraylist index
     HashMap<Integer, Integer> map;
     List<Integer> list;
