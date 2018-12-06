@@ -1,0 +1,38 @@
+class Solution {
+    //leetcode 384
+    //time: O(n), space: O(n)
+    int[] nums;
+    Random random;
+    
+    public Solution(int[] nums) {
+        this.nums = nums;
+        random = new Random();
+    }
+    
+    /** Resets the array to its original configuration and return it. */
+    public int[] reset() {
+        return this.nums;
+    }
+    
+    /** Returns a random shuffling of the array. */
+    public int[] shuffle() {
+        int[] clone = nums.clone();
+        int len = clone.length;
+        for(int i = 0; i < len; i++){
+            int index = random.nextInt(len - i);
+            //swap with last element in array
+            int tmp = clone[len-1-i];
+            clone[len-1-i] = clone[index];
+            clone[index] = tmp;
+        }
+        
+        return clone;
+    }
+}
+
+/**
+ * Your Solution object will be instantiated and called as such:
+ * Solution obj = new Solution(nums);
+ * int[] param_1 = obj.reset();
+ * int[] param_2 = obj.shuffle();
+ */
