@@ -1,0 +1,35 @@
+class Solution {
+    public int triangleNumber(int[] nums) {
+        //leetcode 611, time: O(n^2), O(N^2logn), space: O(logn)
+        if(nums == null || nums.length == 0) return 0;
+        
+        Arrays.sort(nums);
+        int res = 0;
+        
+        for(int i = 0; i < nums.length-2; i++){
+            if(nums[i] == 0) continue;
+            int k = i + 2;
+            for(int j = i+1; j < nums.length-1; j++){
+                //while(k < nums.length && nums[i] + nums[j] > nums[k]){
+                //    k++;
+                //}  
+                
+                k = binarySearch(nums, k, nums.length-1, nums[i]+nums[j]);
+                res += k - j - 1;
+            }
+        }
+        
+        return res;
+    }
+    
+    int binarySearch(int[] nums, int left, int right, int target){
+        while(left <= right && right < nums.length){
+            int mid = (left + right)/2;
+            if(nums[mid] >= target)
+                right = mid-1;
+            else
+                left = mid+1;
+        }
+        return left;
+    }
+}
