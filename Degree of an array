@@ -1,0 +1,63 @@
+class Solution {
+    public int findShortestSubArray(int[] nums) {
+        //leetcode 697 - degree of an array, time: O(n), space: O(n)
+        Map<Integer, Integer> left = new HashMap<>(), 
+        right = new HashMap<>(),
+        count = new HashMap<>();
+        
+        for(int i = 0; i < nums.length; i++){
+            int x = nums[i];
+            if(!left.containsKey(x)){
+                left.put(x, i);
+            }
+            right.put(x, i);
+            count.put(x, count.getOrDefault(x, 0) + 1);
+        }
+        
+        int ans = nums.length;
+        int degree = Collections.max(count.values());
+        for(int x : count.keySet()){
+            if(count.get(x) == degree){
+                ans = Math.min(ans, right.get(x) - left.get(x) + 1);
+            }
+        }
+        
+        return ans;
+        
+        /*
+        int[] count = new int[50000];
+        
+        for(int num: nums){
+            count[num]++;
+        }
+        
+        int maxf = Integer.MIN_VALUE;
+        for(int num : count){
+            maxf = Math.max(maxf, num);
+        }
+        
+        List<Integer> list = new ArrayList<>();
+        
+        for(int i = 0; i < count.length; i++){
+            if(count[i] == maxf)
+                list.add(i);
+        }
+        
+        int res = Integer.MAX_VALUE;
+        for(Integer i : list){
+            List<Integer> ind = new ArrayList<>();
+            for(int j = 0; j < nums.length; j++){
+                if(i == nums[j]){
+                    ind.add(j);
+                }
+            }
+            
+            if(ind.size() != 0){
+                res = Math.min(res, ind.get(ind.size() - 1) - ind.get(0) + 1);
+            }
+        }
+        
+        return res;
+        */
+    }
+}
