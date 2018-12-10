@@ -1,0 +1,35 @@
+class Solution {
+    public int reverse(int x) {
+        //leetcode 7 - reverse integer, time:O(n), space:O(1)
+        long res = 0;
+        
+        while(x != 0){
+            res = res *10 + x % 10;
+            if(res > Integer.MAX_VALUE || res < Integer.MIN_VALUE) return 0;
+            x = x/10;
+        }
+        
+        return (int)res;
+        
+        /*
+        int sign = x > 0 ? 1 : -1;
+        x = Math.abs(x);
+        
+        String s = "";
+        
+        while(x > 0){
+            int m = x % 10;
+            if(m != 0 || s.length() != 0){
+                s = s + m;
+            }
+            
+            x = x/10;
+        }
+        
+        if(s.length() == 0) return 0;
+        
+        long res = sign * (Long.valueOf(s));
+        return res > Integer.MAX_VALUE || res < Integer.MIN_VALUE? 0 : (int)res;
+        */
+    }
+}
