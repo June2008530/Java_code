@@ -1,0 +1,37 @@
+class Solution {
+    public void solve(char[][] board) {
+        //leetcode 130, time: O(m X n), space: O(m X n)
+        if(board == null || board.length == 0) return;
+        
+        int m = board.length;
+        int n = board[0].length;
+        boolean[][] visited = new boolean[m][n];
+        
+        for(int row = 0; row < m; row++){
+            for(int col = 0; col < n; col++){
+                if(board[row][col] == 'O' && !visited[row][col] && (row == 0 || row == m - 1 || col == 0 || col == n - 1)){
+                    dfs(board, visited, row, col, m, n);
+                }
+            }
+        }
+        
+        for(int row = 0; row < m; row++){
+            for(int col = 0; col < n; col++){
+                if(board[row][col] == 'O' && !visited[row][col]){
+                    board[row][col] = 'X';
+                }
+            }
+        }
+    }
+    
+    void dfs(char[][] board, boolean[][] visited, int row, int col, int m, int n){
+        if(row < 0 || row >= m || col < 0 || col >=n || visited[row][col] || board[row][col] == 'X')
+            return;
+        
+        visited[row][col] = true;
+        dfs(board, visited, row - 1, col, m, n);
+        dfs(board, visited, row + 1, col, m, n);
+        dfs(board, visited, row, col - 1, m, n);
+        dfs(board, visited, row, col + 1, m, n);
+    }
+}
