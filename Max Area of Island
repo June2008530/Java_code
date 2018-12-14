@@ -1,0 +1,39 @@
+class Solution {
+    //leetcode 685, time: O(m X n), space: O(m X n)
+    public int maxAreaOfIsland(int[][] grid) {
+        if(grid == null || grid.length == 0) return 0;
+        
+        int m = grid.length;
+        int n = grid[0].length;
+        boolean[][] visited = new boolean[m][n];
+        int ans = 0;
+        
+        for(int row = 0; row < m; row++){
+            for(int col = 0; col < n; col++){
+                List<Integer> list = new ArrayList<>();
+                list.add(0);
+                dfs(grid, visited, row, col, list);
+                //System.out.println(list);
+                ans = Math.max(ans, list.get(0));
+            }
+        }
+        
+        return ans;
+    }
+    
+    void dfs(int[][] grid, boolean[][] visited, int row, int col, List<Integer> list){
+        int m = grid.length;
+        int n = grid[0].length;
+        
+        if(row < 0 || row >= m || col < 0 || col >= n || grid[row][col] == 0 || visited[row][col]){
+            return;
+        }
+        
+        visited[row][col] = true;
+        list.set(0, list.get(0) + 1);
+        dfs(grid, visited, row-1, col, list);
+        dfs(grid, visited, row+1, col, list);
+        dfs(grid, visited, row, col-1, list);
+        dfs(grid, visited, row, col+1, list);
+    }
+}
