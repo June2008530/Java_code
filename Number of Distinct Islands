@@ -1,0 +1,47 @@
+class Solution {
+    //leetcode 694, time: O(m X n), space: O(m X n)
+    
+    int[][] grid;
+    boolean[][] visited;
+    
+    public int numDistinctIslands(int[][] grid) {
+        if(grid == null || grid.length == 0) return 0;
+        
+        this.grid = grid;
+        
+        int m = grid.length;
+        int n = grid[0].length;
+        
+        visited = new boolean[m][n];
+        Set<List<Integer>> set = new HashSet<>();
+        
+        for(int row = 0; row < m; row++){
+            for(int col = 0; col < n; col++){
+                if(grid[row][col] == 1 && !visited[row][col]){
+                    List<Integer> shape = new ArrayList<>();
+                    dfs(shape, row, col, m, n, 0);
+                    System.out.println(shape);
+                    //if(!shape.isEmpty()){
+                        set.add(shape);
+                    //}
+                }
+            }
+        }
+        
+        return set.size();
+    }
+    
+    void dfs(List<Integer> shape, int row, int col, int m, int n, int path){
+        if(row < 0 || row >= m || col < 0 || col >= n || grid[row][col] == 0 || visited[row][col]){
+            return;
+        }
+        
+        visited[row][col] = true;
+        shape.add(path);
+        dfs(shape, row - 1, col, m, n, 1);
+        dfs(shape, row + 1, col, m, n, 2);
+        dfs(shape, row, col - 1, m, n, 3);
+        dfs(shape, row, col + 1, m, n, 4);
+        shape.add(0);
+    }
+}
