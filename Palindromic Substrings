@@ -1,0 +1,27 @@
+class Solution {
+    //leetcode 647, time: O(n^2), space: O(1)
+    public int countSubstrings(String s) {
+        if(s == null) return 0;
+        if(s.length() == 0) return 1;
+        
+        int ans = 0;
+        for(int i = 0; i < s.length(); i++){
+            int c1 = getCount(s, i, i);
+            int c2 = getCount(s, i, i+1);
+            ans += c1 + c2;
+        }
+        
+        return ans;
+    }
+    
+    private int getCount(String s, int start, int end){
+        int count = 0;
+        while(start >= 0 && end < s.length() && s.charAt(start) == s.charAt(end)){
+            count++;
+            start--;
+            end++;
+        }
+        
+        return count;
+    }
+}
