@@ -1,0 +1,62 @@
+/**
+ * Definition for singly-linked list.
+ * class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) {
+ *         val = x;
+ *         next = null;
+ *     }
+ * }
+ */
+public class Solution {
+    private ListNode getIntersect(ListNode head){
+        ListNode slow = head;
+        ListNode fast = head;
+        
+        while(fast != null && fast.next != null){
+            slow = slow.next;
+            fast = fast.next.next;
+            if(slow == fast){
+                return slow;
+            }
+        }
+        
+        return null;
+    }
+    
+    public ListNode detectCycle(ListNode head) {
+        if(head == null || head.next == null) return null;
+        //leetcode 142, time: O(n), space: O(1)
+        ListNode intersect = getIntersect(head);
+        if(intersect == null){
+            return null;
+        }
+        
+        ListNode n1 = head;
+        ListNode n2 = intersect;
+        while(n1 != n2){
+            n1 = n1.next;
+            n2 = n2.next;
+        }
+        
+        return n1;
+        
+        //time: O(n), space: O(n)
+        /*
+        Set<ListNode> set = new HashSet<>();
+        ListNode cur = head;
+        
+        while(cur != null){
+            if(set.contains(cur)){
+                return cur;
+            }
+            
+            set.add(cur);
+            cur = cur.next;
+        }
+        
+        return null;
+        */
+    }
+}
