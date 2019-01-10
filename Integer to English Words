@@ -1,0 +1,90 @@
+class Solution {
+    public String numberToWords(int num) {
+        //leetcode: 273, time: O(n), space: O(1)
+        if(num == 0) return "Zero";
+        
+        int len = (String.valueOf(num)).length();
+        String ans = "";
+        if(len == 10){
+            int b = num/1000000000;
+            if(b != 0) ans += int1ToString(b) + (num%1000000000 != 0?" Billion ":" Billion");
+        }
+        int mill = num % 1000000000 / 1000000;
+        if(mill != 0){
+            ans += int3ToString(mill) + (num%1000000 != 0?" Million ":" Million");
+        }
+        int thou = num % 1000000 / 1000;
+        if(thou != 0){
+            ans += int3ToString(thou) + (num%1000 != 0?" Thousand ":" Thousand");
+        }
+        int hund = num % 1000;
+        if(hund != 0){
+            ans += int3ToString(hund);
+        }
+        
+        return ans;
+    }
+    
+    private String int1ToString(int num){
+        if(num == 1) return "One";
+        else if(num == 2) return "Two";
+        else if(num == 3) return "Three";
+        else if(num == 4) return "Four";
+        else if(num == 5) return "Five";
+        else if(num == 6) return "Six";
+        else if(num == 7) return "Seven";
+        else if(num == 8) return "Eight";
+        else if(num == 9) return "Nine";
+        return "";
+    }
+    
+    private String int2ToString(int num){
+        if(num == 2) return "Twenty";
+        else if(num == 3) return "Thirty";
+        else if(num == 4) return "Forty";
+        else if(num == 5) return "Fifty";
+        else if(num == 6) return "Sixty";
+        else if(num == 7) return "Seventy";
+        else if(num == 8) return "Eighty";
+        else if(num == 9) return "Ninety";
+        return "";
+    }
+    
+    private String tensToString(int num){
+        if(num == 10) return "Ten";
+        else if(num == 11) return "Eleven";
+        else if(num == 12) return "Twelve";
+        else if(num == 13) return "Thirteen";
+        else if(num == 14) return "Fourteen";
+        else if(num == 15) return "Fifteen";
+        else if(num == 16) return "Sixteen";
+        else if(num == 17) return "Seventeen";
+        else if(num == 18) return "Eighteen";
+        else if(num == 19) return "Nineteen";
+        return "";
+    }
+    
+    private String int3ToString(int num){
+        String res = "";
+        int n = num / 100;
+        if(n != 0){
+            res = res + int1ToString(n) + (num%100 != 0?" Hundred ":" Hundred"); 
+        }
+        
+        int m = num % 100;
+        if(m != 0 && m >= 10 && m <= 19){
+            res += tensToString(m);
+        }
+        else{
+            int mid = m / 10;
+            if(mid != 0) {
+               res += int2ToString(mid) + (num % 10 != 0?" ":"");
+            }
+            
+            int l = num % 10;
+            if(l!= 0) res += int1ToString(l);
+        }
+        
+        return res;
+    }
+}
