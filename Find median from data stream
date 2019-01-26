@@ -1,4 +1,54 @@
 class MedianFinder {
+    class MedianFinder {
+    //leetcode 295
+    List<Integer> list;
+    /** initialize your data structure here. */
+    public MedianFinder() {
+        list = new ArrayList<>();
+    }
+    
+    public void addNum(int num) {
+        if(list.isEmpty()){
+            list.add(num);
+        }
+        else{
+            int start = 0;
+            int end = list.size() - 1;
+            while(start+1 < end){
+                int mid = (start + end)/2;
+                if(num < list.get(mid)){
+                    end = mid;
+                }
+                else{
+                    start = mid;
+                }
+            }
+            
+            if(num < list.get(start)){
+               list.add(start, num); 
+            } 
+            else if(num >= list.get(start) && num <= list.get(end)){
+                list.add(start+1, num);
+            }
+            else{
+                list.add(end+1, num);
+            }
+            //System.out.println(list);
+        }
+    }
+    
+    public double findMedian() {
+        return ((double)list.get(list.size()/2) + list.get((list.size()-1)/2))/2;
+    }
+}
+
+/**
+ * Your MedianFinder object will be instantiated and called as such:
+ * MedianFinder obj = new MedianFinder();
+ * obj.addNum(num);
+ * double param_2 = obj.findMedian();
+ */
+
     /* time: O(logn)
        space: O(n)
      */
